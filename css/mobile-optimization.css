@@ -1,0 +1,395 @@
+/* Mobile Optimization Styles
+ * Provides responsive design and touch-friendly controls for mobile devices
+ */
+
+/* Mobile Navigation Drawer */
+.mobile-drawer-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.mobile-drawer {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background-color: var(--surface-color);
+    box-shadow: 2px 0 10px var(--shadow-color);
+    z-index: 1010;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.mobile-drawer.active {
+    left: 0;
+}
+
+.mobile-drawer-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1005;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-drawer-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.drawer-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.drawer-close-btn:hover {
+    background-color: var(--hover-bg-color);
+}
+
+.drawer-content {
+    padding: 10px;
+}
+
+.drawer-content ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.drawer-content li {
+    margin-bottom: 5px;
+}
+
+.drawer-content a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.drawer-content a:hover,
+.drawer-content a.active {
+    background-color: var(--hover-bg-color);
+}
+
+.drawer-content a i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Touch-friendly Styles */
+.touch-device .btn,
+.touch-device button:not(.widget-control),
+.touch-device .nav a,
+.touch-device input[type="checkbox"] + label,
+.touch-device input[type="radio"] + label {
+    padding: 12px 16px;
+}
+
+.touch-device input,
+.touch-device select,
+.touch-device textarea {
+    font-size: 16px; /* Prevent iOS zoom on focus */
+}
+
+.touch-device .form-group {
+    margin-bottom: 20px;
+}
+
+.touch-device .form-group label {
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Touch-friendly table rows */
+.touch-row {
+    padding: 15px 8px;
+    transition: background-color 0.2s ease;
+}
+
+.touch-row:active {
+    background-color: var(--hover-bg-color);
+}
+
+/* Table responsiveness */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+}
+
+/* Mobile-specific Stacking */
+@media (max-width: 767px) {
+    .mobile-stack {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    .mobile-stack > * {
+        width: 100% !important;
+        margin-right: 0 !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .mobile-vertical {
+        flex-direction: column !important;
+    }
+    
+    .mobile-vertical > * {
+        width: 100% !important;
+        margin-right: 0 !important;
+    }
+    
+    .mobile-vertical .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .mobile-hide {
+        display: none !important;
+    }
+    
+    /* Show mobile drawer toggle button */
+    .mobile-drawer-toggle {
+        display: block;
+    }
+    
+    /* Hide desktop navigation */
+    header nav > ul {
+        display: none !important;
+    }
+    
+    /* Adjust header spacing */
+    header {
+        padding: 10px 15px;
+    }
+    
+    header h1 {
+        font-size: 20px;
+    }
+    
+    /* Simplify buttons on mobile */
+    .btn-primary, .btn-secondary {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    
+    /* Optimize modal for mobile */
+    .modal-content {
+        width: 95% !important;
+        margin: 20px auto !important;
+        padding: 15px !important;
+    }
+    
+    /* Adjust stats cards */
+    .stat-card, .metric-item {
+        padding: 15px 10px;
+    }
+    
+    /* Adjust widgets */
+    .dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .dashboard-widget {
+        grid-column: span 1 !important;
+    }
+    
+    .widget-header {
+        padding: 10px;
+    }
+    
+    .widget-content {
+        padding: 10px;
+    }
+    
+    /* Better form fields on mobile */
+    .mobile-field {
+        height: 44px;
+        font-size: 16px !important;
+    }
+    
+    textarea.mobile-field {
+        height: auto;
+        min-height: 100px;
+    }
+    
+    /* Show more/less buttons */
+    .btn-show-more {
+        background: transparent;
+        color: var(--primary-color);
+        border: none;
+        padding: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-left: 5px;
+    }
+    
+    /* Trade items swipe actions */
+    .trade-item {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .trade-item-actions {
+        position: absolute;
+        right: -100px;
+        top: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        transition: transform 0.3s ease;
+        background-color: var(--surface-color);
+    }
+    
+    .trade-item.show-actions .trade-item-actions {
+        transform: translateX(-100px);
+    }
+    
+    /* Enhanced scrolling on touch devices */
+    .touch-device .scrollable {
+        -webkit-overflow-scrolling: touch;
+        overflow-scrolling: touch;
+    }
+    
+    /* Swipeable cards */
+    .swipeable {
+        transform: translateZ(0); /* Ensure hardware acceleration */
+        transition: transform 0.2s ease;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 575px) {
+    .container {
+        padding: 10px !important;
+    }
+    
+    h2 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    /* Adjust the forms to be more compact */
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    /* Adjust mobile drawer size */
+    .mobile-drawer {
+        width: 250px;
+    }
+}
+
+/* Medium devices - tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(6, 1fr) !important;
+    }
+    
+    .dashboard-widget.widget-half {
+        grid-column: span 3 !important;
+    }
+    
+    .dashboard-widget.widget-full {
+        grid-column: span 6 !important;
+    }
+}
+
+/* Landscape orientation adjustments for mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .mobile-drawer {
+        padding-bottom: 60px; /* Add extra padding at the bottom */
+    }
+    
+    .section {
+        padding-bottom: 60px;
+    }
+}
+
+/* Print styles - hide mobile elements when printing */
+@media print {
+    .mobile-drawer-toggle,
+    .mobile-drawer,
+    .mobile-drawer-backdrop {
+        display: none !important;
+    }
+}
+
+/* High contrast adjustments for accessibility */
+@media (forced-colors: active) {
+    .btn, button, a {
+        forced-color-adjust: none;
+    }
+}
+
+/* Nested scroll container fixes for iOS */
+.touch-device .nested-scroll {
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    z-index: 1;
+}
+
+/* Additional touch targets optimization */
+@media (pointer: coarse) {
+    .form-actions button,
+    .data-actions button,
+    .widget-control {
+        min-height: 44px;
+    }
+    
+    /* Extra padding on dropdowns for easier selection */
+    select {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}

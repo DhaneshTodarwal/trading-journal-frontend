@@ -1,0 +1,363 @@
+/* Trading Journal Tag System Styles */
+
+/* Tag container styles */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+/* Individual tag styles */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: rgba(255, 107, 53, 0.1);
+  color: var(--primary-color);
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.tag-pill:hover {
+  background-color: rgba(255, 107, 53, 0.15);
+  transform: translateY(-2px);
+}
+
+.tag-pill.active {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 2px 5px rgba(255, 107, 53, 0.3);
+}
+
+.tag-pill i {
+  margin-left: 6px;
+  font-size: 11px;
+}
+
+/* Tag colors */
+.tag-pill.green {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.tag-pill.green:hover {
+  background-color: rgba(76, 175, 80, 0.15);
+}
+
+.tag-pill.green.active {
+  background-color: #4CAF50;
+  color: white;
+  box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
+}
+
+.tag-pill.blue {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: #2196F3;
+}
+
+.tag-pill.blue:hover {
+  background-color: rgba(33, 150, 243, 0.15);
+}
+
+.tag-pill.blue.active {
+  background-color: #2196F3;
+  color: white;
+  box-shadow: 0 2px 5px rgba(33, 150, 243, 0.3);
+}
+
+.tag-pill.purple {
+  background-color: rgba(156, 39, 176, 0.1);
+  color: #9C27B0;
+}
+
+.tag-pill.purple:hover {
+  background-color: rgba(156, 39, 176, 0.15);
+}
+
+.tag-pill.purple.active {
+  background-color: #9C27B0;
+  color: white;
+  box-shadow: 0 2px 5px rgba(156, 39, 176, 0.3);
+}
+
+.tag-pill.yellow {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #FFC107;
+}
+
+.tag-pill.yellow:hover {
+  background-color: rgba(255, 193, 7, 0.15);
+}
+
+.tag-pill.yellow.active {
+  background-color: #FFC107;
+  color: white;
+  box-shadow: 0 2px 5px rgba(255, 193, 7, 0.3);
+}
+
+/* Tag creator styles */
+.tag-creator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.tag-creator input {
+  padding: 6px 10px;
+  border-radius: 50px;
+  border: 1px solid var(--border-color);
+  font-size: 13px;
+  width: 140px;
+}
+
+.tag-creator button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  transition: transform 0.2s ease;
+}
+
+.tag-creator button:hover {
+  transform: scale(1.1);
+}
+
+/* Tag in trade list/details */
+.trade-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.trade-tag {
+  padding: 2px 8px;
+  border-radius: 50px;
+  font-size: 11px;
+  background-color: rgba(255, 107, 53, 0.1);
+  color: var(--primary-color);
+}
+
+.trade-tag.green {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.trade-tag.blue {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: #2196F3;
+}
+
+.trade-tag.purple {
+  background-color: rgba(156, 39, 176, 0.1);
+  color: #9C27B0;
+}
+
+.trade-tag.yellow {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #FFC107;
+}
+
+/* Tag manager modal */
+.tag-manager-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.managed-tag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background-color: var(--secondary-color);
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.managed-tag:hover {
+  background-color: var(--secondary-hover);
+}
+
+.managed-tag-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tag-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.tag-edit-btn, .tag-delete-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  background-color: transparent;
+  border: none;
+}
+
+.tag-edit-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--primary-color);
+}
+
+.tag-delete-btn:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--danger-color);
+}
+
+.dark-theme .tag-edit-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-theme .tag-delete-btn:hover {
+  background-color: rgba(244, 67, 54, 0.2);
+}
+
+/* Color picker for tags */
+.color-selector {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-option.selected {
+  transform: scale(1.1);
+  border-color: white;
+  box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.color-orange {
+  background-color: var(--primary-color);
+}
+
+.color-green {
+  background-color: #4CAF50;
+}
+
+.color-blue {
+  background-color: #2196F3;
+}
+
+.color-purple {
+  background-color: #9C27B0;
+}
+
+.color-yellow {
+  background-color: #FFC107;
+}
+
+/* Tag filter section in trade history */
+.tag-filter-section {
+  margin-bottom: 15px;
+  padding: 12px 15px;
+  background-color: var(--secondary-color);
+  border-radius: 8px;
+}
+
+.tag-filter-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag-filter-title i {
+  color: var(--primary-color);
+}
+
+/* Dark theme adjustments */
+.dark-theme .tag-pill {
+  background-color: rgba(255, 107, 53, 0.2);
+}
+
+.dark-theme .tag-pill:hover {
+  background-color: rgba(255, 107, 53, 0.25);
+}
+
+.dark-theme .tag-pill.green {
+  background-color: rgba(76, 175, 80, 0.2);
+}
+
+.dark-theme .tag-pill.green:hover {
+  background-color: rgba(76, 175, 80, 0.25);
+}
+
+.dark-theme .tag-pill.blue {
+  background-color: rgba(33, 150, 243, 0.2);
+}
+
+.dark-theme .tag-pill.blue:hover {
+  background-color: rgba(33, 150, 243, 0.25);
+}
+
+.dark-theme .tag-pill.purple {
+  background-color: rgba(156, 39, 176, 0.2);
+}
+
+.dark-theme .tag-pill.purple:hover {
+  background-color: rgba(156, 39, 176, 0.25);
+}
+
+.dark-theme .tag-pill.yellow {
+  background-color: rgba(255, 193, 7, 0.2);
+}
+
+.dark-theme .tag-pill.yellow:hover {
+  background-color: rgba(255, 193, 7, 0.25);
+}
+
+.dark-theme .managed-tag {
+  background-color: #2d333b;
+}
+
+.dark-theme .managed-tag:hover {
+  background-color: #353c45;
+}
+
+.dark-theme .tag-filter-section {
+  background-color: #2d333b;
+}

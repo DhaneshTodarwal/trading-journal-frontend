@@ -1,0 +1,2289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
+    <title>Indian Trading Journal</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Custom fonts -->
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    
+    <!-- Main styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Animation styles -->
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <!-- Modern UI styles -->
+    <link rel="stylesheet" href="css/modern-ui.css">
+    
+    <!-- Tag system styles -->
+    <link rel="stylesheet" href="css/tag-system.css">
+    
+    <!-- Rules Compliance styles -->
+    <link rel="stylesheet" href="css/rules-compliance.css">
+    
+    <!-- AI Assistant styles -->
+    <link rel="stylesheet" href="css/ai-assistant.css">
+
+    <!-- Theme System styles -->
+    <link rel="stylesheet" href="css/theme-system.css">
+    
+    <!-- Market Heatmap styles -->
+    <link rel="stylesheet" href="css/market-heatmap.css">
+    
+    <!-- Streak Milestone styles -->
+    <link rel="stylesheet" href="css/streak-milestone.css">
+    
+    <!-- New UI/UX Improvement CSS -->
+    <link rel="stylesheet" href="css/modern-dashboard.css">
+    <link rel="stylesheet" href="css/mobile-optimization.css">
+
+    <link rel="stylesheet" href="css/user-profile.css">
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Yahoo Finance API -->
+    <script src="js/yahoo-finance-api.js"></script>
+
+    <!-- Streak Milestone Tracking -->
+    <script src="js/streak-milestone.js"></script>
+
+    <style>
+    /* Hide Calendar tab in the navigation */
+    [data-section="calendar"],
+    nav a[href="#calendar"],
+    .tab-link[data-tab="calendar"],
+    #calendar-tab,
+    .calendar-nav-item {
+        display: none !important;
+    }
+
+    /* Enhanced Charts Design */
+
+    /* Common improvements for all analytics charts */
+    .analytics-card {
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .analytics-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .analytics-card .card-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        font-weight: 600;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .analytics-card .card-content {
+        padding: 20px;
+        position: relative;
+    }
+
+    /* Add icons to chart headers */
+    .analytics-card .card-header::before {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        opacity: 0.7;
+        font-size: 15px;
+    }
+
+    /* Specific icon for Time of Day Analysis */
+    .analytics-card:has(#time-performance-chart) .card-header::before {
+        content: "\f017"; /* Clock icon */
+        color: #2196F3;
+    }
+
+    /* Specific icon for Performance by Stock */
+    .analytics-card:has(#stock-performance-chart) .card-header::before {
+        content: "\f201"; /* Chart icon */
+        color: #FF9800;
+    }
+
+    /* Chart canvas improvements */
+    canvas {
+        max-width: 100%;
+        height: auto !important;
+        margin: 0 auto;
+    }
+
+    /* Specific improvements for Time of Day Analysis */
+    #time-performance-chart {
+        min-height: 300px;
+        max-height: 350px;
+    }
+
+    /* Specific improvements for Performance by Stock */
+    #stock-performance-chart {
+        min-height: 300px;
+        max-height: 400px;
+    }
+
+    /* Chart container - helps with responsive sizing */
+    .chart-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Grid layout for analytics section */
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 20px;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    /* Time of Day Analysis takes 7/12 on large screens */
+    .analytics-grid .analytics-card:has(#time-performance-chart) {
+        grid-column: span 7;
+    }
+
+    /* Performance by Stock takes 5/12 on large screens */
+    .analytics-grid .analytics-card:has(#stock-performance-chart) {
+        grid-column: span 5;
+    }
+
+    /* Make both full width on smaller screens */
+    @media (max-width: 992px) {
+        .analytics-grid .analytics-card {
+            grid-column: span 12 !important;
+        }
+    }
+
+    /* Chart title styling */
+    .chart-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    /* Empty state styling */
+    .chart-empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        color: #666;
+        text-align: center;
+    }
+
+    .chart-empty-state i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.3;
+    }
+
+    /* Add chart tooltips enhancement */
+    .custom-chart-tooltip {
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        border-radius: 8px;
+        padding: 10px 14px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        font-size: 13px;
+        max-width: 200px;
+        z-index: 10;
+    }
+
+    /* Loading state */
+    .chart-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+    }
+
+    .chart-loading::after {
+        content: "";
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-top-color: var(--primary-color);
+        border-radius: 50%;
+        animation: chart-loading-spin 1s linear infinite;
+    }
+
+    @keyframes chart-loading-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Win Streak Analysis Styles */
+    .streak-card {
+        overflow: visible;
+    }
+
+    /* Streak metrics styling */
+    .streak-metrics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 15px 0;
+    }
+
+    .streak-metric {
+        flex: 1;
+        min-width: 120px;
+        padding: 15px 10px;
+        border-radius: 10px;
+        text-align: center;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+    }
+
+    .streak-metric:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .metric-value.positive {
+        color: #4caf50;
+    }
+
+    .metric-value.negative {
+        color: #f44336;
+    }
+
+    .metric-value.neutral {
+        color: #ff9800;
+    }
+
+    /* Section titles */
+    .streak-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 25px 0 15px 0;
+        color: #333;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding-bottom: 8px;
+    }
+
+    /* Streak comparison chart styling */
+    .streak-comparison-container {
+        height: 250px;
+        margin-top: 15px;
+        background: rgba(250, 250, 250, 0.4);
+        border-radius: 10px;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+        padding: 10px;
+    }
+
+    /* Streak stats styling */
+    .streak-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .stat-item {
+        flex: 1;
+        min-width: 150px;
+        padding: 12px 15px;
+        border-radius: 8px;
+        background: #f5f5f5;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .stat-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .stat-value.positive {
+        color: #4caf50;
+    }
+
+    .stat-value.negative {
+        color: #f44336;
+    }
+
+    .stat-value.neutral {
+        color: #ff9800;
+    }
+
+    /* Streak insights */
+    .streak-insight-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .streak-insight-card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+    }
+
+    .streak-insight-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Streak pattern indicators */
+    .streak-pattern {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 8px;
+        color: white;
+    }
+
+    .pattern-strong {
+        background-color: #4caf50;
+    }
+
+    .pattern-weak {
+        background-color: #f44336;
+    }
+
+    .pattern-neutral {
+        background-color: #ff9800;
+    }
+
+    .pattern-info {
+        background-color: #2196f3;
+    }
+
+    /* Streak badges for timeline */
+    .streak-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: white;
+        margin-right: 5px;
+    }
+
+    .win-streak {
+        background-color: rgba(76, 175, 80, 0.8);
+    }
+
+    .loss-streak {
+        background-color: rgba(244, 67, 54, 0.8);
+    }
+
+    /* No data message */
+    .no-data-message {
+        text-align: center;
+        padding: 30px;
+        background: rgba(0, 0, 0, 0.02);
+        border-radius: 8px;
+        color: #666;
+        font-style: italic;
+        margin: 20px 0;
+    }
+
+    /* Report generator button styling */
+    .reports-btn {
+        margin-left: auto;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .reports-btn i {
+        font-size: 16px;
+    }
+
+    /* Report modal date range inputs */
+    .date-range-inputs {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .date-range-inputs input[type="date"] {
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* Report options styling */
+    .report-options {
+        margin-top: 20px;
+    }
+
+    .report-options .checkbox-container {
+        margin-bottom: 10px;
+    }
+
+    /* Modal footer styling */
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border-color);
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Trading Journal Dashboard</h1>
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                <i class="fas fa-adjust"></i>
+            </button>
+            
+            <!-- User Profile Dropdown -->
+            <div class="user-profile-dropdown">
+                <div id="profile-trigger" class="profile-trigger">
+                    <div class="user-avatar">
+                        <span id="user-initials">U</span>
+                    </div>
+                    <span id="user-display-name">User</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="profile-dropdown" class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <div class="user-avatar user-avatar-large">
+                            <span id="user-initials-large">U</span>
+                        </div>
+                        <div class="user-info">
+                            <h4 id="user-full-name">User</h4>
+                            <p id="user-email-display">user@example.com</p>
+                        </div>
+                    </div>
+                    <ul class="dropdown-items">
+                        <li><a href="#" id="view-profile-btn"><i class="fas fa-user"></i> View Profile</a></li>
+                        <li><a href="#" id="change-password-btn"><i class="fas fa-key"></i> Change Password</a></li>
+                        <li><a href="#" id="settings-btn"><i class="fas fa-cog"></i> Settings</a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" data-section="dashboard">Dashboard</a></li>
+                    <li><a href="#" data-section="new-trade">New Trade</a></li>
+                    <li><a href="#" data-section="trade-history">Trade History</a></li>
+                    <li><a href="#" data-section="trade-review">Trade Review</a></li>
+                    <li><a href="#" data-section="risk-calculator">Risk Calculator</a></li>
+                    <li><a href="#" data-section="trading-rules">Trading Rules</a></li>
+                    <li><a href="#" data-section="analytics">Analytics</a></li>
+                    <li><a href="#" data-section="settings" title="Settings"><i class="fas fa-cog"></i></a></li>
+                </ul>
+            </nav>
+            <!-- Add this button somewhere in your header or top navigation area -->
+            <button id="sync-csv-btn" class="btn-sync-csv" title="Sync trades to CSV">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </header>
+        
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active dashboard">
+            <div class="dashboard-welcome">
+                <div class="welcome-message">
+                    <h3>Welcome to your Trading Journal</h3>
+                    <p>Track, analyze and improve your trading performance</p>
+                </div>
+                <div class="date-display">
+                    <i class="fas fa-calendar-alt"></i> <span id="current-date"></span>
+                </div>
+                <!-- Report Generator Button -->
+                <button id="generate-report-btn" class="btn-primary reports-btn">
+                    <i class="fas fa-file-pdf"></i> Generate Report
+                </button>
+            </div>
+            
+            <div class="stats-container" data-aos="fade-up">
+                <div class="stat-card hover-float" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="stat-icon win-rate-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Win Rate</h3>
+                        <p id="win-rate">0% <span class="trend trend-up"><i class="fas fa-arrow-up"></i></span></p>
+                    </div>
+                </div>
+                
+                <div class="stat-card hover-float" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="stat-icon total-trades-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Total Trades</h3>
+                        <p id="total-trades">0</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card hover-float">
+                    <div class="stat-icon avg-return-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Avg. Return</h3>
+                        <p id="avg-return">0% <span class="trend trend-up"><i class="fas fa-arrow-up"></i></span></p>
+                    </div>
+                </div>
+                
+                <div class="stat-card hover-float">
+                    <div class="stat-icon net-profit-icon">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Net Profit</h3>
+                        <p id="net-profit">₹0.00 <span class="trend trend-up"><i class="fas fa-arrow-up"></i></span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-charts">
+                <div class="chart-container line-chart">
+                    <h3><i class="fas fa-chart-line"></i> Performance History</h3>
+                    <canvas id="profit-loss-chart"></canvas>
+                </div>
+                
+                <div class="chart-container pie-chart">
+                    <h3><i class="fas fa-chart-pie"></i> Win/Loss Ratio</h3>
+                    <canvas id="win-loss-chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="recent-trades">
+                <h3><i class="fas fa-history"></i> Recent Trades</h3>
+                <div id="recent-trades-list">
+                    <!-- Recent trades will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Streak Milestone Container -->
+            <div id="streak-milestone-container">
+                <!-- Streak milestone content will be populated by JavaScript -->
+            </div>
+            
+            <!-- Market Heatmap Section -->
+            <div class="market-heatmap-section">
+                <h3><i class="fas fa-th"></i> Market Sector Heatmap</h3>
+                <div id="market-heatmap-container">
+                    <!-- Market heatmap will be rendered here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Main App / Dashboard Section -->
+        <section id="dashboard-section">
+            <div id="user-info" style="padding: 10px; border-bottom: 1px solid #ccc; margin-bottom: 15px;">
+                Welcome, <span id="user-email-display">user</span>!
+                <button id="logout-button" style="float: right;">Logout</button>
+            </div>
+
+            <!-- === PASTE YOUR EXISTING MAIN CONTENT HERE === -->
+            <!-- Example: Your existing header, add trade form, trade table etc. -->
+            <!-- <header> ... </header> -->
+            <!-- <form id="add-trade-form"> ... </form> -->
+            <!-- <table id="trade-table"> ... </table> -->
+            <!-- ============================================ -->
+
+        </section>
+        
+        <!-- New Trade Section -->
+        <section id="new-trade" class="section" data-aos="fade-left">
+            <h2>Add New Trade</h2>
+            
+            <form id="trade-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stock">Stock Symbol</label>
+                        <input type="text" id="stock" placeholder="e.g., TATASTEEL, RELIANCE" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trade-type">Trade Type</label>
+                        <select id="trade-type" required>
+                            <option value="Long">Long</option>
+                            <option value="Short">Short</option>
+                            <option value="Option Call">Option Call</option>
+                            <option value="Option Put">Option Put</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="strike-price">Strike Price (₹)</label>
+                        <input type="number" id="strike-price" step="0.01" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="stop-loss">Stop Loss (%)</label>
+                        <input type="number" id="stop-loss" step="0.01" min="0" placeholder="e.g., 12">
+                    </div>
+
+                    <div class="form-group target-fields">
+                        <label>Profit Targets</label>
+                        <div class="target-container">
+                            <div class="target-row">
+                                <input type="number" class="target-value" step="0.01" placeholder="Target %" min="0">
+                                <button type="button" class="btn-secondary add-target"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="trailing-sl">
+                            <label for="trailing-sl">Used Trailing Stop Loss</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="actual-profit">Actual Profit/Loss Booked (%)</label>
+                        <input type="number" id="actual-profit" step="0.01" required>
+                    </div>
+                </div>
+                
+                <div class="form-group psychology-section">
+                    <label>Trade Psychology</label>
+                    <div class="mood-selector">
+                        <div class="mood-option">
+                            <input type="radio" name="mood" id="mood-confident" value="Confident">
+                            <label for="mood-confident" class="mood-label">
+                                <i class="fas fa-smile"></i>
+                                <span>Confident</span>
+                            </label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="mood" id="mood-neutral" value="Neutral">
+                            <label for="mood-neutral" class="mood-label">
+                                <i class="fas fa-meh"></i>
+                                <span>Neutral</span>
+                            </label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="mood" id="mood-unsure" value="Unsure">
+                            <label for="mood-unsure" class="mood-label">
+                                <i class="fas fa-frown"></i>
+                                <span>Unsure</span>
+                            </label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="mood" id="mood-fomo" value="FOMO">
+                            <label for="mood-fomo" class="mood-label">
+                                <i class="fas fa-running"></i>
+                                <span>FOMO</span>
+                            </label>
+                        </div>
+                        <div class="mood-option">
+                            <input type="radio" name="mood" id="mood-revenge" value="Revenge">
+                            <label for="mood-revenge" class="mood-label">
+                                <i class="fas fa-bolt"></i>
+                                <span>Revenge</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="strategy-selector">
+                        <label>Trade Strategy</label>
+                        <div class="strategy-options">
+                            <div class="strategy-option">
+                                <input type="radio" name="strategy" id="strategy-trend" value="Trend Following">
+                                <label for="strategy-trend">Trend Following</label>
+                            </div>
+                            <div class="strategy-option">
+                                <input type="radio" name="strategy" id="strategy-breakout" value="Breakout">
+                                <label for="strategy-breakout">Breakout</label>
+                            </div>
+                            <div class="strategy-option">
+                                <input type="radio" name="strategy" id="strategy-reversal" value="Reversal">
+                                <label for="strategy-reversal">Reversal</label>
+                            </div>
+                            <div class="strategy-option">
+                                <input type="radio" name="strategy" id="strategy-swing" value="Swing Trade">
+                                <label for="strategy-swing">Swing Trade</label>
+                            </div>
+                            <div class="strategy-option">
+                                <input type="radio" name="strategy" id="strategy-scalping" value="Scalping">
+                                <label for="strategy-scalping">Scalping</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Trade Notes</label>
+                    <textarea id="notes" placeholder="Your analysis, strategy, learning points..."></textarea>
+                </div>
+                
+                <!-- Trade Tags Section -->
+                <div class="form-group">
+                    <label>Trade Tags <small>(categorize your trade)</small></label>
+                    <div class="tags-container" id="trade-tags-container">
+                        <!-- Tags will be loaded here by JavaScript -->
+                    </div>
+                    <div class="tag-creator">
+                        <input type="text" id="new-tag-input" placeholder="Create new tag">
+                        <button type="button" id="add-tag-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Trading Rules Compliance Section -->
+                <div class="form-group">
+                    <div class="rule-compliance-section">
+                        <div class="rule-compliance-title">
+                            <i class="fas fa-check-circle"></i> Trading Rules Compliance
+                        </div>
+                        <p class="compliance-description">Check the rules you followed for this trade:</p>
+                        <div class="compliance-checklist" id="rule-compliance-checklist">
+                            <!-- Rules checklist will be loaded by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot Upload Section -->
+                <div class="form-group screenshot-section">
+                    <label for="screenshot">Trade Screenshot (Optional)</label>
+                    <div class="screenshot-uploader">
+                        <div id="upload-area" class="upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop image or click to browse</p>
+                            <input type="file" id="screenshot" name="screenshot" accept="image/*" hidden>
+                        </div>
+                        <div id="screenshot-preview" class="screenshot-preview"></div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary animate-pulse">Save Trade</button>
+                    <button type="reset" class="btn-secondary">Reset</button>
+                </div>
+            </form>
+
+            <div class="risk-calculator card">
+                <h3><i class="fas fa-calculator"></i> Risk Calculator</h3>
+                <div class="calculator-grid">
+                    <div class="calculator-group">
+                        <label for="calc-capital">Capital (₹)</label>
+                        <input type="number" id="calc-capital" value="100000">
+                    </div>
+                    <div class="calculator-group">
+                        <label for="calc-risk">Risk (%)</label>
+                        <input type="number" id="calc-risk" value="2" step="0.1" min="0" max="100">
+                    </div>
+                    <div class="calculator-group">
+                        <label for="calc-entry">Entry Price (₹)</label>
+                        <input type="number" id="calc-entry" placeholder="0.00">
+                    </div>
+                    <div class="calculator-group">
+                        <label for="calc-stoploss">Stop Loss (₹)</label>
+                        <input type="number" id="calc-stoploss" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="calculator-results">
+                    <div class="result-item">
+                        <span class="result-label">Max Risk Amount:</span>
+                        <span class="result-value" id="risk-amount">₹0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Position Size:</span>
+                        <span class="result-value" id="position-size">0 shares</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Risk/Reward Ratio:</span>
+                        <span class="result-value" id="risk-reward">0:1</span>
+                    </div>
+                </div>
+                <div class="calculator-targets">
+                    <h4>Potential Targets</h4>
+                    <table class="targets-table">
+                        <tr>
+                            <th>R/R</th>
+                            <th>Target Price</th>
+                            <th>Profit</th>
+                        </tr>
+                        <tr>
+                            <td>1:1</td>
+                            <td id="target-1">₹0.00</td>
+                            <td id="profit-1">₹0.00</td>
+                        </tr>
+                        <tr>
+                            <td>2:1</td>
+                            <td id="target-2">₹0.00</td>
+                            <td id="profit-2">₹0.00</td>
+                        </tr>
+                        <tr>
+                            <td>3:1</td>
+                            <td id="target-3">₹0.00</td>
+                            <td id="profit-3">₹0.00</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Position Size Calculator Section -->
+        <section id="risk-calculator" class="section">
+            <h2><i class="fas fa-calculator"></i> Advanced Position Size Calculator</h2>
+            
+            <div class="section-description">
+                <p>Calculate the optimal position size based on your account size and risk tolerance. Set your risk parameters, entry and stop loss prices to get precise position sizing.</p>
+            </div>
+            
+            <div class="risk-calculator-container">
+                <div class="calculator-card">
+                    <div class="card-header">
+                        <h3>Risk Parameters</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="calculator-grid">
+                            <div class="calculator-group">
+                                <label for="account-size">Account Size (₹)</label>
+                                <input type="number" id="account-size" placeholder="Enter account size" value="100000">
+                                <small>Your total trading capital</small>
+                            </div>
+                            
+                            <div class="calculator-group">
+                                <label for="risk-percent">Risk Per Trade (%)</label>
+                                <input type="number" id="risk-percent" placeholder="Risk percentage" value="2" min="0.1" max="10" step="0.1">
+                                <small>Recommended: 1-2% of account</small>
+                            </div>
+                            
+                            <div class="calculator-group">
+                                <label for="entry-price">Entry Price (₹)</label>
+                                <input type="number" id="entry-price" placeholder="Entry price">
+                                <small>Price at which you enter the trade</small>
+                            </div>
+                            
+                            <div class="calculator-group">
+                                <label for="stop-loss-price">Stop Loss Price (₹)</label>
+                                <input type="number" id="stop-loss-price" placeholder="Stop loss price">
+                                <small>Price at which you'll exit to limit losses</small>
+                            </div>
+                        </div>
+                        
+                        <button id="calculate-position" class="btn-primary mt-20">
+                            <i class="fas fa-calculator"></i> Calculate Position Size
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="calculator-card results-card">
+                    <div class="card-header">
+                        <h3>Position Size Results</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="result-grid">
+                            <div class="result-item">
+                                <div class="result-icon">
+                                    <i class="fas fa-rupee-sign"></i>
+                                </div>
+                                <div class="result-details">
+                                    <div class="result-label">Amount at Risk</div>
+                                    <div class="result-value" id="amount-at-risk">₹0.00</div>
+                                </div>
+                            </div>
+                            
+                            <div class="result-item">
+                                <div class="result-icon">
+                                    <i class="fas fa-chart-pie"></i>
+                                </div>
+                                <div class="result-details">
+                                    <div class="result-label">Position Size (Shares)</div>
+                                    <div class="result-value" id="position-size">0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="result-item">
+                                <div class="result-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="result-details">
+                                    <div class="result-label">Total Position Value</div>
+                                    <div class="result-value" id="position-value">₹0.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="calculator-card targets-card">
+                    <div class="card-header">
+                        <h3>Profit Targets (Based on Risk-Reward Ratio)</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="targets-explanation">
+                            <p>The table below shows potential profit targets based on different risk-reward ratios. For example, a 2:1 ratio means you aim to make twice what you're risking.</p>
+                        </div>
+                        
+                        <div class="targets-table-container">
+                            <table class="targets-table">
+                                <thead>
+                                    <tr>
+                                        <th>Risk:Reward</th>
+                                        <th>Target Price</th>
+                                        <th>Potential Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="targets-table-body">
+                                    <!-- Target rows will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="calculator-card tips-card">
+                    <div class="card-header">
+                        <h3>Risk Management Tips</h3>
+                    </div>
+                    <div class="card-content">
+                        <ul class="tips-list">
+                            <li><i class="fas fa-check-circle"></i> Keep risk consistent across trades (typically 1-2% per trade)</li>
+                            <li><i class="fas fa-check-circle"></i> Always set stop losses before entering a trade</li>
+                            <li><i class="fas fa-check-circle"></i> Aim for a minimum risk-reward ratio of 1:2</li>
+                            <li><i class="fas fa-check-circle"></i> Consider reducing position size in volatile markets</li>
+                            <li><i class="fas fa-check-circle"></i> Track your risk management metrics over time</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Position Sizing Calculator Section -->
+        <section id="position-sizing" class="section">
+            <h2>Position Sizing Calculator</h2>
+            <p class="section-description">Calculate optimal position size based on your risk management rules.</p>
+            
+            <div class="risk-calculator-container">
+                <div class="calculator-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calculator"></i> Position Size Calculator</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="calculator-grid">
+                            <div class="calculator-group">
+                                <label for="account-size">Account Size (₹)</label>
+                                <input type="number" id="account-size" placeholder="Enter your account size" min="0" step="1000">
+                                <small>Your total trading capital</small>
+                            </div>
+                            <div class="calculator-group">
+                                <label for="risk-percentage">Risk Per Trade (%)</label>
+                                <input type="number" id="risk-percentage" placeholder="Enter risk percentage" min="0.1" max="10" step="0.1" value="1">
+                                <small>Recommended: 1-2% of your account</small>
+                            </div>
+                        </div>
+                        
+                        <div class="calculator-grid mt-20">
+                            <div class="calculator-group">
+                                <label for="entry-price">Entry Price (₹)</label>
+                                <input type="number" id="entry-price" placeholder="Enter entry price" min="0" step="0.05">
+                            </div>
+                            <div class="calculator-group">
+                                <label for="stop-loss-price">Stop Loss Price (₹)</label>
+                                <input type="number" id="stop-loss-price" placeholder="Enter stop loss price" min="0" step="0.05">
+                            </div>
+                        </div>
+                        
+                        <div class="checkbox-container mt-10">
+                            <input type="checkbox" id="is-futures" name="is-futures">
+                            <label for="is-futures">This is a futures/options trade</label>
+                        </div>
+                        
+                        <div id="futures-options" class="mt-20" style="display: none;">
+                            <div class="calculator-grid">
+                                <div class="calculator-group">
+                                    <label for="lot-size">Lot Size</label>
+                                    <input type="number" id="lot-size" placeholder="Enter lot size" min="1" value="1">
+                                    <small>Number of shares per lot</small>
+                                </div>
+                                <div class="calculator-group">
+                                    <label for="margin-required">Margin Required per Lot (₹)</label>
+                                    <input type="number" id="margin-required" placeholder="Margin required">
+                                    <small>Required margin per lot</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button id="calculate-position" class="btn primary mt-20">Calculate Position Size</button>
+                        
+                        <div id="position-results" class="mt-20" style="display: none;">
+                            <h4>Position Size Results</h4>
+                            
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <div class="result-icon">
+                                        <i class="fas fa-rupee-sign"></i>
+                                    </div>
+                                    <div class="result-details">
+                                        <div class="result-label">Risk Amount</div>
+                                        <div class="result-value" id="risk-amount">₹0.00</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="result-item">
+                                    <div class="result-icon">
+                                        <i class="fas fa-coins"></i>
+                                    </div>
+                                    <div class="result-details">
+                                        <div class="result-label">Position Size</div>
+                                        <div class="result-value" id="position-size">0 shares</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="mt-20">Risk-to-Reward Targets</h4>
+                            <p class="targets-explanation">Based on your stop loss, here are potential targets at different R:R ratios:</p>
+                            
+                            <div class="targets-table-container">
+                                <table class="targets-table">
+                                    <thead>
+                                        <tr>
+                                            <th>R:R Ratio</th>
+                                            <th>Target Price (₹)</th>
+                                            <th>Profit (₹)</th>
+                                            <th>% Gain</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="targets-table-body">
+                                        <!-- Target rows will be populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="calculator-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-lightbulb"></i> Position Sizing Tips</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Proper position sizing is essential for long-term trading success. Here are some key principles:</p>
+                        
+                        <ul class="tips-list">
+                            <li><i class="fas fa-check-circle"></i> Always risk only what you can afford to lose (1-2% per trade recommended)</li>
+                            <li><i class="fas fa-check-circle"></i> Your position size should be based on your stop loss placement, not arbitrary numbers</li>
+                            <li><i class="fas fa-check-circle"></i> For volatile stocks, consider reducing your position size</li>
+                            <li><i class="fas fa-check-circle"></i> Always use a stop loss to protect your capital</li>
+                            <li><i class="fas fa-check-circle"></i> Avoid overtrading - quality over quantity</li>
+                        </ul>
+                        
+                        <div class="section-description mt-20">
+                            <p><strong>Risk Management Rule:</strong> Never risk more than you can afford to lose on a single trade.</p>
+                        </div>
+                        
+                        <div class="mt-20">
+                            <button id="save-calculator-settings" class="btn secondary">Save Default Settings</button>
+                            <small class="mt-10" style="display: block;">Saves your risk settings as default for future calculations</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Trade History Section -->
+        <section id="trade-history" class="section" data-aos="fade-up" data-aos-delay="300">
+            <h2>Trade History</h2>
+            
+            <div class="controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search" placeholder="Search trades...">
+                </div>
+                
+                <div class="filters">
+                    <select id="filter">
+                        <option value="all">All Types</option>
+                        <option value="Long">Long</option>
+                        <option value="Short">Short</option>
+                        <option value="Option Call">Option Call</option>
+                        <option value="Option Put">Option Put</option>
+                    </select>
+                    
+                    <select id="sort">
+                        <option value="date-desc">Newest First</option>
+                        <option value="date-asc">Oldest First</option>
+                        <option value="profit-desc">Highest Profit</option>
+                        <option value="profit-asc">Highest Loss</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Tag Filter Section -->
+            <div class="tag-filter-section">
+                <div class="tag-filter-title">
+                    <i class="fas fa-tags"></i> Filter by Tags
+                </div>
+                <div class="tags-container" id="filter-tags-container">
+                    <!-- Tags will be loaded here by JavaScript -->
+                </div>
+            </div>
+            
+            <div id="trades-list">
+                <!-- Trades will be displayed here -->
+            </div>
+            
+            <div class="data-actions">
+                <button id="export-btn" class="btn-export">
+                    <i class="fas fa-cloud-download-alt"></i> Export Trades
+                </button>
+                <label for="import-input" class="btn-import">
+                    <i class="fas fa-cloud-upload-alt"></i> Import Trades
+                    <input type="file" id="import-input" accept=".json" hidden>
+                </label>
+                <button id="clear-all-trades-btn" class="btn-danger">
+                    <i class="fas fa-trash-alt"></i> Clear All Trades
+                </button>
+            </div>
+        </section>
+        
+        <!-- Trading Rules Section -->
+        <section id="trading-rules" class="section">
+            <h2>Trading Rules Compliance Tracker</h2>
+            
+            <div class="section-description">
+                <p>Define your trading rules and track your compliance to improve your trading discipline.</p>
+            </div>
+            
+            <div class="compliance-stats">
+                <div class="compliance-stat-card">
+                    <div class="compliance-stat-value" id="overall-compliance-rate">0%</div>
+                    <div class="compliance-stat-label">Overall Compliance Rate</div>
+                </div>
+                <div class="compliance-stat-card">
+                    <div class="compliance-stat-value" id="compliance-total-trades">0</div>
+                    <div class="compliance-stat-label">Trades Tracked</div>
+                </div>
+                <div class="compliance-stat-card">
+                    <div class="compliance-stat-value" id="most-followed-rule">None</div>
+                    <div class="compliance-stat-label">Most Followed Rule</div>
+                </div>
+                <div class="compliance-stat-card">
+                    <div class="compliance-stat-value" id="least-followed-rule">None</div>
+                    <div class="compliance-stat-label">Least Followed Rule</div>
+                </div>
+            </div>
+            
+            <div class="trading-rules-container">
+                <div class="rules-header">
+                    <h3>Your Trading Rules</h3>
+                    <button id="add-rule-btn" class="btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Add New Rule
+                    </button>
+                </div>
+                <!-- START: Add New Rule Form -->
+                <div id="add-rule-form" class="add-rule-form hidden">
+                    <form id="rule-form">
+                        <h4 class="rule-form-title">Add New Rule</h4>
+                        <button type="button" id="close-rule-form" class="close-form-btn" title="Close form">&times;</button>
+                        <input type="hidden" id="rule-id">
+                        <div class="form-group">
+                            <label for="rule-title">Rule Title</label>
+                            <input type="text" id="rule-title" required placeholder="e.g., Don't chase trades">
+                        </div>
+                        <div class="form-group">
+                            <label for="rule-description">Description (Optional)</label>
+                            <textarea id="rule-description" placeholder="Explain the rule briefly"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="rule-impact">Impact</label>
+                            <select id="rule-impact">
+                                <option value="high">High</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Save Rule</button>
+                            <button type="button" id="cancel-rule-btn" class="btn-secondary">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- END: Add New Rule Form -->
+                <div id="trading-rules-list">
+                    <!-- Rules list rendered here by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="compliance-chart-container">
+                <h3>Rule Compliance Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="compliance-chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="rule-profit-correlation">
+                <h3 class="correlation-title">Rule Compliance vs Profit/Loss</h3>
+                <p>This chart shows how following each rule correlates with your trading performance.</p>
+                <div class="correlation-chart-container">
+                    <canvas id="rule-correlation-chart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Calendar Section -->
+        <section id="calendar" class="section">
+            <h2>Trading Calendar</h2>
+            
+            <div class="calendar-controls">
+                <button id="prev-month" class="btn-secondary"><i class="fas fa-chevron-left"></i></button>
+                <h3 id="calendar-month">March 2024</h3>
+                <button id="next-month" class="btn-secondary"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- Calendar days will be inserted here -->
+                </div>
+            </div>
+            
+            <div id="day-trades" class="day-trades">
+                <h3 id="selected-date">Select a date to see trades</h3>
+                <div id="day-trades-list"></div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="section">
+            <h2>Data Storage Settings</h2>
+            
+            <div class="settings-container">
+                <div class="setting-group">
+                    <h3><i class="fas fa-folder"></i> CSV Storage Location</h3>
+                    <p class="setting-description">Configure where your trading data will be stored as CSV files.</p>
+                    
+                    <div class="form-group">
+                        <label for="csv-directory">CSV Directory Path</label>
+                        <div class="directory-input">
+                            <input type="text" id="csv-directory" placeholder="/path/to/your/trading/data" value="/home/dhanesh-todarwal/Trading journal data">
+                            <button id="select-directory" class="btn-secondary">
+                                <i class="fas fa-folder-open"></i> Browse
+                            </button>
+                        </div>
+                        <small>Trading data will be saved as CSV files in this directory. Images will be stored in an 'images' subfolder.</small>
+                    </div>
+                    
+                    <div class="form-actions mt-20">
+                        <button id="save-directory-settings" class="btn-primary">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="csv-actions setting-group">
+                    <h3><i class="fas fa-file-csv"></i> CSV File Operations</h3>
+                    
+                    <div class="csv-buttons">
+                        <button id="save-to-csv" class="btn-action-large">
+                            <i class="fas fa-file-export"></i>
+                            <span>Save to CSV</span>
+                        </button>
+                        
+                        <button id="load-from-csv" class="btn-action-large">
+                            <i class="fas fa-file-import"></i>
+                            <span>Load from CSV</span>
+                        </button>
+                    </div>
+                    
+                    <div id="csv-file-list" class="file-list-container hidden">
+                        <h4>Select a CSV file to load:</h4>
+                        <div class="file-list" id="csv-files">
+                            <!-- CSV files will be listed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CSV File Picker Modal -->
+        <div id="csv-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Select a CSV File</h2>
+                <div id="csv-file-options">
+                    <!-- CSV files will be listed here for selection -->
+                </div>
+            </div>
+        </div>
+    
+    </div>
+    
+    <!-- Trade Detail Modal -->
+    <div id="trade-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+    
+    <!-- Report Generator Modal -->
+    <div id="report-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2><i class="fas fa-file-pdf"></i> Generate Trading Report</h2>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="report-period">Report Period</label>
+                    <select id="report-period">
+                        <option value="week">This Week</option>
+                        <option value="month" selected>This Month</option>
+                        <option value="quarter">Last 3 Months</option>
+                        <option value="ytd">Year to Date</option>
+                        <option value="year">Last Year</option>
+                        <option value="all">All Time</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+                
+                <div id="report-custom-dates" class="form-group" style="display: none;">
+                    <label>Custom Date Range</label>
+                    <div class="date-range-inputs">
+                        <input type="date" id="report-start-date">
+                        <span>to</span>
+                        <input type="date" id="report-end-date">
+                    </div>
+                </div>
+                
+                <div class="form-group report-options">
+                    <label>Report Options</label>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="include-charts" checked>
+                        <label for="include-charts">Include Performance Charts</label>
+                    </div>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="include-trades" checked>
+                        <label for="include-trades">Include Recent Trades</label>
+                    </div>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="include-tag-analysis" checked>
+                        <label for="include-tag-analysis">Include Tag Performance Analysis</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary modal-close">Cancel</button>
+                <button type="button" id="download-report-btn" class="btn-primary">
+                    <i class="fas fa-download"></i> Generate Report
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- New Analytics Section - Add this before closing </body> tag -->
+    <section id="analytics" class="section">
+        <h2>Trade Analytics</h2>
+        
+        <div class="analytics-filters">
+            <div class="form-group">
+                <label for="analytics-date-range">Date Range</label>
+                <select id="analytics-date-range">
+                    <option value="all">All Time</option>
+                    <option value="month">This Month</option>
+                    <option value="quarter">Last 3 Months</option>
+                    <option value="halfyear">Last 6 Months</option>
+                    <option value="year">Last Year</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+            </div>
+            
+            <div class="form-group custom-date-range hidden">
+                <label>Custom Range</label>
+                <div class="date-inputs">
+                    <input type="date" id="analytics-start-date">
+                    <span>to</span>
+                    <input type="date" id="analytics-end-date">
+                    <button id="apply-date-range" class="btn-secondary">Apply</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="analytics-container">
+            <div class="analytics-card">
+                <h3><i class="fas fa-calendar-alt"></i> Trading Calendar</h3>
+                <div id="trade-calendar" class="calendar-container"></div>
+            </div>
+            
+            <div class="analytics-card">
+                <h3><i class="fas fa-chart-line"></i> Performance by Day of Week</h3>
+                <canvas id="day-performance-chart"></canvas>
+            </div>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3><i class="fas fa-clock"></i> Time of Day Analysis</h3>
+                    <canvas id="time-performance-chart"></canvas>
+                </div>
+                
+                <div class="analytics-card">
+                    <h3><i class="fas fa-tags"></i> Performance by Stock</h3>
+                    <canvas id="stock-performance-chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="analytics-card">
+                <h3><i class="fas fa-award"></i> Your Trading Insights</h3>
+                <div class="insights-container">
+                    <div class="insight-item">
+                        <div class="insight-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="insight-content">
+                            <h4>Best Trading Day</h4>
+                            <p id="best-day-insight">Loading...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="insight-content">
+                            <h4>Challenging Trading Day</h4>
+                            <p id="worst-day-insight">Loading...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-icon"><i class="fas fa-star"></i></div>
+                        <div class="insight-content">
+                            <h4>Best Performing Stock</h4>
+                            <p id="best-stock-insight">Loading...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="insight-content">
+                            <h4>Win Streak</h4>
+                            <p id="win-streak-insight">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Win Streak Analysis Section -->
+            <div class="analytics-card streak-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Win Streak Analysis</h3>
+                    <div class="chart-actions">
+                        <button class="chart-action-btn" id="streak-download">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="chart-action-btn" id="streak-fullscreen">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Key streak metrics -->
+                <div class="streak-metrics">
+                    <div class="streak-metric">
+                        <div class="metric-value" id="longest-win-streak">0</div>
+                        <div class="metric-label">Longest Win Streak</div>
+                    </div>
+                    <div class="streak-metric">
+                        <div class="metric-value" id="longest-loss-streak">0</div>
+                        <div class="metric-label">Longest Loss Streak</div>
+                    </div>
+                    <div class="streak-metric">
+                        <div class="metric-value" id="current-streak">0</div>
+                        <div class="metric-label">Current Streak</div>
+                    </div>
+                    <div class="streak-metric">
+                        <div class="metric-value" id="avg-streak-return">0%</div>
+                        <div class="metric-label">Avg. Win Streak Return</div>
+                    </div>
+                </div>
+                
+                <!-- Streak timeline chart -->
+                <div class="chart-container">
+                    <canvas id="streak-chart"></canvas>
+                </div>
+                
+                <!-- Streak performance metrics -->
+                <div class="streak-performance">
+                    <h4 class="streak-section-title">Streak Performance Comparison</h4>
+                    <div class="streak-comparison-container">
+                        <canvas id="streak-comparison-chart"></canvas>
+                    </div>
+                    <div class="streak-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Win After Loss P/L</div>
+                            <div class="stat-value" id="win-after-loss">+0.0%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Loss After Win P/L</div>
+                            <div class="stat-value" id="loss-after-win">-0.0%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Post-Streak Behavior</div>
+                            <div class="stat-value" id="post-streak-behavior">Neutral</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Trade Review Section -->
+    <section id="trade-review" class="section">
+        <h2><i class="fas fa-clipboard-check"></i> Trade Review System</h2>
+        
+        <div class="section-description">
+            <p>Systematically review your trades to identify strengths, weaknesses, and patterns in your trading behavior. Regular trade reviews are essential for continuous improvement.</p>
+        </div>
+        
+        <div class="trade-review-container">
+            <!-- Review Form Card -->
+            <div class="review-card form-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-pen"></i> Create New Review</h3>
+                </div>
+                <div class="card-content">
+                    <form id="trade-review-form">
+                        <div class="form-group">
+                            <label for="review-trade-id">Select Trade to Review</label>
+                            <select id="review-trade-id" required>
+                                <option value="">-- Select a trade --</option>
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        
+                        <div id="review-trade-details">
+                            <!-- Trade details will be displayed here -->
+                        </div>
+                        
+                        <div class="review-ratings">
+                            <div class="rating-group">
+                                <label>Execution Quality</label>
+                                <div class="star-rating">
+                                    <input type="hidden" id="execution-rating" value="0">
+                                    <span class="star" data-rating="1"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="2"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="3"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="4"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="5"><i class="far fa-star"></i></span>
+                                </div>
+                                <small>How well did you execute your entry and exit?</small>
+                            </div>
+                            
+                            <div class="rating-group">
+                                <label>Trade Plan Adherence</label>
+                                <div class="star-rating">
+                                    <input type="hidden" id="plan-rating" value="0">
+                                    <span class="star" data-rating="1"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="2"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="3"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="4"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="5"><i class="far fa-star"></i></span>
+                                </div>
+                                <small>Did you follow your trading plan?</small>
+                            </div>
+                            
+                            <div class="rating-group">
+                                <label>Risk Management</label>
+                                <div class="star-rating">
+                                    <input type="hidden" id="risk-rating" value="0">
+                                    <span class="star" data-rating="1"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="2"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="3"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="4"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="5"><i class="far fa-star"></i></span>
+                                </div>
+                                <small>How well did you manage risk?</small>
+                            </div>
+                            
+                            <div class="rating-group">
+                                <label>Emotional Control</label>
+                                <div class="star-rating">
+                                    <input type="hidden" id="emotion-rating" value="0">
+                                    <span class="star" data-rating="1"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="2"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="3"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="4"><i class="far fa-star"></i></span>
+                                    <span class="star" data-rating="5"><i class="far fa-star"></i></span>
+                                </div>
+                                <small>How well did you control your emotions?</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="review-notes">Review Notes</label>
+                            <textarea id="review-notes" placeholder="What went well? What could be improved? Any observations?"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Areas for Improvement</label>
+                            <div id="improvement-tags-container" class="tags-container">
+                                <!-- Improvement tags will be loaded here by JavaScript -->
+                            </div>
+                            <div class="tag-creator">
+                                <input type="text" id="improvement-points" placeholder="Type to add improvement point">
+                                <button type="button" id="add-improvement-tag">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div id="selected-improvements" class="selected-tags-container">
+                                <!-- Selected improvements will appear here -->
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" id="save-review" class="btn-primary">
+                                <i class="fas fa-save"></i> Save Review
+                            </button>
+                            <button type="reset" class="btn-secondary">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Review List Card -->
+            <div class="review-card list-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-list"></i> Your Trade Reviews</h3>
+                    <div class="review-controls">
+                        <select id="review-filter">
+                            <option value="all">All Reviews</option>
+                            <option value="winners">Winning Trades</option>
+                            <option value="losers">Losing Trades</option>
+                            <option value="high-rating">High Ratings</option>
+                            <option value="low-rating">Low Ratings</option>
+                        </select>
+                        <select id="review-sort">
+                            <option value="date-new">Newest First</option>
+                            <option value="date-old">Oldest First</option>
+                            <option value="rating-high">Highest Rated</option>
+                            <option value="rating-low">Lowest Rated</option>
+                            <option value="profit-high">Highest Profit</option>
+                            <option value="profit-low">Highest Loss</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div id="reviews-list">
+                        <!-- Reviews will be displayed here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Review Statistics Card -->
+            <div class="review-card stats-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-bar"></i> Review Statistics</h3>
+                </div>
+                <div class="card-content">
+                    <div class="review-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                            <div class="stat-content">
+                                <div class="stat-label">Avg. Execution</div>
+                                <div class="stat-value" id="avg-execution">0.0</div>
+                                <div class="stat-scale">
+                                    <div class="scale-bar">
+                                        <div class="scale-fill" style="width: 0%"></div>
+                                    </div>
+                                    <div class="scale-labels">
+                                        <span>Poor</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+                            <div class="stat-content">
+                                <div class="stat-label">Avg. Plan Adherence</div>
+                                <div class="stat-value" id="avg-plan">0.0</div>
+                                <div class="scale-bar">
+                                        <div class="scale-fill" style="width: 0%"></div>
+                                    </div>
+                                    <div class="scale-labels">
+                                        <span>Poor</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="stat-content">
+                                <div class="stat-label">Avg. Risk Management</div>
+                                <div class="stat-value" id="avg-risk">0.0</div>
+                                <div class="scale-bar">
+                                        <div class="scale-fill" style="width: 0%"></div>
+                                    </div>
+                                    <div class="scale-labels">
+                                        <span>Poor</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-brain"></i></div>
+                            <div class="stat-content">
+                                <div class="stat-label">Avg. Emotional Control</div>
+                                <div class="stat-value" id="avg-emotion">0.0</div>
+                                <div class="scale-bar">
+                                        <div class="scale-fill" style="width: 0%"></div>
+                                    </div>
+                                    <div class="scale-labels">
+                                        <span>Poor</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div }
+                    
+                    <div class="improvement-analysis">
+                        <h4>Common Areas for Improvement</h4>
+                        <div id="common-improvements">
+                            <!-- Common improvement points will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Trade Statistics Dashboard Section -->
+    <section id="statistics" class="section">
+        <h2>Trade Statistics Dashboard</h2>
+        <p class="section-description">Detailed analysis of your trading performance metrics and patterns.</p>
+        
+        <div class="stats-header">
+            <div class="date-filter">
+                <select id="stats-period" class="stats-filter">
+                    <option value="all">All Time</option>
+                    <option value="year">Past Year</option>
+                    <option value="6month">Past 6 Months</option>
+                    <option value="3month">Past 3 Months</option>
+                    <option value="month">This Month</option>
+                    <option value="week">This Week</option>
+                    <option value="custom">Custom Period</option>
+                </select>
+                
+                <div id="custom-date-range" class="custom-date-range" style="display: none;">
+                    <input type="date" id="stats-start-date" class="date-input">
+                    <span>to</span>
+                    <input type="date" id="stats-end-date" class="date-input">
+                    <button type="button" id="apply-custom-range" class="btn-secondary btn-sm">Apply</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-dashboard">
+            <!-- Key Performance Metrics -->
+            <div class="stats-card dashboard-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-line"></i> Key Performance Metrics</h3>
+                </div>
+                <div class="card-content">
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-icon profit-icon">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                            <div class="metric-details">
+                                <div class="metric-value" id="total-profit-loss">₹0.00</div>
+                                <div class="metric-label">Total P&L</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-item">
+                            <div class="metric-icon win-rate-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="metric-details">
+                                <div class="metric-value" id="win-rate-value">0%</</div>
+                                <div class="metric-label">Win Rate</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-item">
+                            <div class="metric-icon profit-factor-icon">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            <div class="metric-details">
+                                <div class="metric-value" id="profit-factor">0.00</div>
+                                <div class="metric-label">Profit Factor</div>
+                                <div class="metric-tooltip" data-tooltip="Gross profit divided by gross loss. Values above 1.5 are considered good.">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-item">
+                            <div class="metric-icon avg-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="metric-details">
+                                <div class="metric-value" id="avg-return">0%</</div>
+                                <div class="metric-label">Avg. Return</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-item">
+                            <div class="metric-icon expectancy-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="metric-details">
+                                <div class="metric-value" id="expectancy">₹0.00</div>
+                                <div class="metric-label">Expectancy</div>
+                                <div class="metric-tooltip" data-tooltip="Average amount you can expect to win or lose per trade. (Win Rate × Avg Win) - (Loss Rate × Avg Loss)">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-item">
+                            <div class="metric-icon risk-reward-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="metric-details">
+                               <div class="metric-value" id="risk-reward-ratio">0:0</div>
+                            <div class="metric-label">Risk:Reward</div>
+                            </div>
+                        </div>
+                        
+                        <div<div class="metric-item">
+                            <div class="metric-icon max-drawdown-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="metric-details">
+                                <div class="metric-value" id="max-drawdown">0%</</div>
+                                <div class="metric-label">Max Drawdown</div>
+                                <div class="metric-tooltip" data-tooltip="Largest drop from peak to trough in your account equity.">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-item">
+                            <div class="metric-icon sharpe-icon">
+                                <i class="fas fa-chart-area"></i>
+                            </div>
+                            <div class="metric-details">
+                                <div class="metric-value" id="sharpe-ratio">0.00</div>
+                                <div class="metric-label">Sharpe Ratio</div>
+                                <div class="metric-tooltip" data-tooltip="Return generated beyond risk-free rate per unit of risk. Higher is better.">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Winning vs Losing Trades Comparison -->
+            <div class="stats-row">
+                <div class="stats-card win-loss-comparison">
+                    <div class="card-header">
+                        <h3><i class="fas fa-balancescale-right"></i> Win/Loss Comparison</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <div class="item-label">Average Win</div>
+                                <div class="item-value win" id="avg-win">₹0.00</div>
+                            </div>
+                            <div class="comparison-item">
+                                <div class="item-label">Average Loss</div>
+                                <div class="item-value loss" id="avg-loss">₹0.00</div>
+                            </div>
+                            <div class="comparison-item">
+                                <div class="item-label">Largest Win</div>
+                                <div class="item-value win" id="largest-win">₹0.00</div>
+                            </div>
+                            <div class="comparison-item">
+                                <div class="item-label">Largest Loss</div>
+                                <div class="item-value loss" id="largest-loss">₹0.00</div>
+                            </div>
+                            <div class="comparison-item">
+                                <div class="item-label">Win Consistency</div>
+                                <div class="item-value" id="win-consistency">0%</</div>
+                            </div>
+                            <div class="comparison-item">
+                                <div class="item-label">Loss Consistency</div>
+                                <div class="item-value" id="loss-consistency">0%</</div>
+                            </div>
+                        </div>
+                        
+                        <div class="win-loss-chart-container">
+                            <canvas id="win-loss-comparison-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Monthly Performance -->
+                <div class="stats-card monthly-performance">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Monthly Performance</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="chart-container">
+                            <canvas id="monthly-performance-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trade Duration Analysis -->
+            <div class="stats-row">
+                <div class="stats-card trade-duration">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clock"></i> Trade Duration Analysis</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="duration-metrics">
+                            <div class="duration-item">
+                                <div class="duration-label">Avg. Trade Duration</div>
+                                <div class="duration-value" id="avg-trade-duration">0 days</</div>
+                            </div>
+                            <div class="duration-item">
+                                <div class="duration-label">Median Trade Duration</div>
+                                <div class="duration-value" id="median-trade-duration">0 days</</div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <canvas id="trade-duration-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trading Volume Patterns -->
+                <div class="stats-card trading-volume">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Trading Volume Patterns</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="volume-metrics">
+                            <div class="volume-item">
+                                <div class="volume-label">Total Trades</div>
+                                <div class="volume-value" id="total-trades-count">0</</div>
+                            </div>
+                            <div class="volume-item">
+                                <div class="volume-label">Avg Trades/Month</div>
+                                <div class="volume-value" id="avg-monthly-trades">0</</div>
+                            </div>
+                            <div class="volume-item">
+                                <div class="volume-label">Most Active Day</div>
+                                <div class="volume-value" id="most-active-day">N/A</</div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <canvas id="volume-patterns-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trade Type Performance Comparison -->
+            <div class="stats-row">
+                <div class="stats-card trade-type-performance">
+                    <div class="card-header">
+                        <h3><i class="fas fa-tags"></i> Performance by Trade Type</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="trade-type-tabs">
+                            <button class="tab-button active" data-tab="long">Long</button>
+                            <button class="tab-button" data-tab="short">Short</button>
+                            <button class="tab-button" data-tab="option-call">Option Call</button>
+                            <button class="tab-button" data-tab="option-put">Option Put</button>
+                        </div>
+                        
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="long-tab">
+                                <div class="trade-type-metrics">
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Win Rate</div>
+                                        <div class="trade-type-value" id="long-win-rate">0%</</div>
+                                    </div>
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Avg Return</div>
+                                        <div class="trade-type-value" id="long-avg-return">0%</</div>
+                                    </div>
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Total P&L</div>
+                                        <div class="trade-type-value" id="long-total-pl">₹0.00</</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="short-tab">
+                                <div class="trade-type-metrics">
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Win Rate</div>
+                                        <div class="trade-type-value" id="short-win-rate">0%</</div>
+                                    </div>
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Avg Return</div>
+                                        <div class="trade-type-value" id="short-avg-return">0%</</div>
+                                    </div>
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Total P&L</div>
+                                        <div class="trade-type-value" id="short-total-pl">₹0.00</</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="option-call-tab">
+                                <div class="trade-type-metrics">
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Win Rate</div>
+                                        <div class="trade-type-value" id="option-call-win-rate">0%</</div>
+                                    </div>
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Avg Return</div>
+                                        <div class="trade-type-value" id="option-call-avg-return">0%</</div>
+                                    </div>
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Total P&L</div>
+                                        <div class="trade-type-value" id="option-call-total-pl">₹0.00</</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="option-put-tab">
+                                <div class="trade-type-metrics">
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Win Rate</div>
+                                        <div class="trade-type-value" id="option-put-win-rate">0%</</div>
+                                    </div>
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Avg Return</div>
+                                        <div class="trade-type-value" id="option-put-avg-return">0%</</div>
+                                    </div>
+                                    <div class="trade-type-item">
+                                        <div class="trade-type-label">Total P&L</div>
+                                        <div class="trade-type-value" id="option-put-total-pl">₹0.00</</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <canvas id="trade-type-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Psychological Impact Analysis -->
+                <div class="stats-card psychological-impact">
+                    <div class="card-header">
+                        <h3><i class="fas fa-brain"></i> Psychological Impact Analysis</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="psychology-summary">
+                            <div class="psychology-item">
+                                <div class="psychology-label">Best Performing Mood</div>
+                                <div class="psychology-value" id="best-mood">N/A</</div>
+                            </div>
+                            <div class="psychology-item">
+                                <div class="psychology-label">Worst Performing Mood</div>
+                                <div class="psychology-value" id="worst-mood">N/A</</div>
+                            </div>
+                            <div class="psychology-item">
+                                <div class="psychology-label">FOMO Trade Win Rate</div>
+                                <div class="psychology-value" id="fomo-win-rate">0%</</div>
+                            </div>
+                            <div class="psychology-item">
+                                <div class="psychology-label">Revenge Trade Win Rate</div>
+                                <div class="psychology-value" id="revenge-win-rate">0%</</div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <canvas id="psychology-impact-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- User Profile Modal -->
+    <div id="profile-modal" class="modal profile-modal">
+        <div class="modal-content profile-modal-content">
+            <span id="close-profile-modal" class="close">&times;</span>
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <span id="modal-user-initials">U</span>
+                </div>
+                <div class="profile-info">
+                    <h2 id="user-full-name">User</h2>
+                    <p id="modal-user-email">user@example.com</p>
+                    <p class="member-info">Member since <span id="member-since">May 7, 2023</span></p>
+                </div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-exchange-alt"></i></div>
+                    <div class="stat-value" id="total-trades">0</div>
+                    <div class="stat-label">Total Trades</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="stat-value" id="win-rate">0%</</div>
+                    <div class="stat-label">Win Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-value" id="total-profit">$0.00</div>
+                    <div class="stat-label">Total Profit</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                    <div class="stat-value" id="accuracy">0%</</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button id="profile-change-password" class="btn-secondary">
+                    <i class="fas fa-key"></i> Change Password
+                </button>
+                <button id="profile-edit-settings" class="btn-secondary">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+                <button id="profile-logout" class="btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Password Change Modal -->
+    <div id="password-modal" class="modal password-modal">
+        <div class="modal-content password-modal-content">
+            <span id="close-password-modal" class="close">&times;</span>
+            <h2><i class="fas fa-key"></i> Change Password</h2>
+            
+            <form id="change-password-form">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" required>
+                    <small>Minimum 6 characters</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">Confirm New Password</label>
+                    <input type="password" id="confirm-password" required>
+                </div>
+                
+                <div id="password-error" class="error-message"></div>
+                
+                <div class="form-actions">
+                    <button type="button" id="cancel-password-change" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
+    <script src="js/csv-handler.js"></script>
+    <script src="js/trade-statistics.js"></script>
+    <script src="js/tag-system.js"></script>
+    <script src="js/trade-review.js"></script>
+    <script src="js/risk-calculator.js"></script>
+    <script src="js/rules-compliance.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    <script src="js/ui-animations.js"></script>
+    <script src="js/theme-system.js"></script>
+    <script src="js/win-streak.js"></script>
+    <script src="js/advanced-charts.js"></script>
+    <script src="js/market-heatmap.js"></script>
+    <script src="js/modern-dashboard.js"></script>
+    <script src="js/dashboard-enhancements.js"></script>
+    <script src="js/position-sizing.js"></script>
+    <script src="js/mobile-optimization.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="js/report-generator.js"></script>
+    <script src="js/streak-analysis.js"></script>
+    <script src="js/screenshot-uploader.js"></script>
+    <script src="js/user-profile.js"></script>
+
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Initialize AOS -->
+    <script>
+      AOS.init({
+          duration: 800, // Animation duration
+          once: true // Only animate once
+      });
+    </script>
+</body>
+</html>

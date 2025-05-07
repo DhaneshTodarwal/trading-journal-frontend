@@ -1,0 +1,337 @@
+/**
+ * Trading Streak & Milestone CSS
+ * This file contains all styles for the trading streak and milestone feature
+ * To remove this feature, simply remove this file and the corresponding JS file
+ */
+
+/* Container styles */
+.streak-milestone-widget {
+    background-color: var(--card-bg-color, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.streak-milestone-widget:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Header styles */
+.streak-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.streak-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.streak-header h3 i {
+    color: #ff6b6b;
+}
+
+.streak-tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.streak-tab {
+    padding: 12px;
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    color: var(--text-color-secondary, #666);
+    border-bottom: 2px solid transparent;
+}
+
+.streak-tab.active {
+    color: var(--primary-color, #2196F3);
+    border-bottom-color: var(--primary-color, #2196F3);
+    background-color: rgba(33, 150, 243, 0.05);
+}
+
+.streak-tab:hover:not(.active) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Content styles */
+.streak-content {
+    padding: 20px;
+}
+
+.streak-tab-content {
+    display: none;
+}
+
+.streak-tab-content.active {
+    display: block;
+}
+
+/* Current streak display */
+.streak-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.streak-counter {
+    font-size: 60px;
+    font-weight: 700;
+    color: var(--primary-color, #2196F3);
+    line-height: 1.1;
+    margin-bottom: 8px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.streak-label {
+    font-size: 16px;
+    color: var(--text-color, #333);
+    text-align: center;
+    line-height: 1.4;
+    max-width: 80%;
+}
+
+.streak-separator {
+    width: 40px;
+    height: 3px;
+    background-color: var(--primary-color, #2196F3);
+    margin: 10px auto;
+    border-radius: 2px;
+}
+
+.streak-subtext {
+    font-size: 14px;
+    color: var(--text-color-secondary, #666);
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* Milestone styles */
+.milestone-list {
+    padding: 0;
+    list-style-type: none;
+    margin: 0;
+}
+
+.milestone-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.milestone-item:last-child {
+    border-bottom: none;
+}
+
+.milestone-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.milestone-icon.completed {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+}
+
+.milestone-icon.in-progress {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: #ff9800;
+}
+
+.milestone-icon.future {
+    background-color: rgba(158, 158, 158, 0.15);
+    color: #9e9e9e;
+}
+
+.milestone-details {
+    flex-grow: 1;
+}
+
+.milestone-title {
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--text-color, #333);
+}
+
+.milestone-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar {
+    height: 6px;
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--primary-color, #2196F3);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.progress-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-color-secondary, #666);
+    min-width: 45px;
+    text-align: right;
+}
+
+.milestone-badge {
+    margin-left: auto;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-completed {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+}
+
+.badge-in-progress {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: #ff9800;
+}
+
+.badge-future {
+    background-color: rgba(158, 158, 158, 0.15);
+    color: #9e9e9e;
+}
+
+/* History section */
+.streak-history {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.history-date {
+    font-weight: 500;
+    margin-right: 15px;
+    min-width: 100px;
+}
+
+.history-streak {
+    font-weight: 600;
+    color: var(--primary-color, #2196F3);
+}
+
+.history-break {
+    color: #f44336;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+/* Empty states */
+.empty-streak {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-color-secondary, #666);
+}
+
+.empty-streak i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: rgba(0, 0, 0, 0.1);
+}
+
+.empty-streak p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Animations */
+.celebrate-animation {
+    animation: celebrate 1s ease-out;
+}
+
+@keyframes celebrate {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Dark theme support */
+[data-theme="dark"] .streak-milestone-widget {
+    background-color: var(--card-bg-color, #2d333b);
+}
+
+[data-theme="dark"] .milestone-icon.completed {
+    background-color: rgba(76, 175, 80, 0.2);
+}
+
+[data-theme="dark"] .milestone-icon.in-progress {
+    background-color: rgba(255, 152, 0, 0.2);
+}
+
+[data-theme="dark"] .milestone-icon.future {
+    background-color: rgba(158, 158, 158, 0.2);
+}
+
+[data-theme="dark"] .history-item {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .empty-streak i {
+    color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .streak-counter {
+        font-size: 48px;
+    }
+    
+    .streak-label {
+        font-size: 14px;
+    }
+    
+    .history-date {
+        min-width: 80px;
+    }
+}

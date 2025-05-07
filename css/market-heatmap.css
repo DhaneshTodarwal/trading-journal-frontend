@@ -1,0 +1,287 @@
+/**
+ * Market Heat Map Styles
+ */
+
+/* Container styles */
+.market-heatmap-widget {
+    background-color: var(--card-bg-color, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.market-heatmap-widget:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Header styles */
+.heatmap-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.heatmap-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.heatmap-header h3 i {
+    color: #ff6b6b;
+}
+
+/* Controls styles */
+.heatmap-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.heatmap-controls select {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color, #ddd);
+    background-color: var(--input-bg-color, #f8f9fa);
+    color: var(--text-color, #333);
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.heatmap-controls select:focus {
+    outline: none;
+    border-color: var(--primary-color, #2196F3);
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.heatmap-controls .btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--input-bg-color, #f8f9fa);
+    border: 1px solid var(--border-color, #ddd);
+    color: var(--text-color, #333);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.heatmap-controls .btn-icon:hover {
+    background-color: var(--primary-color, #2196F3);
+    color: #fff;
+}
+
+.heatmap-controls .btn-icon.rotating i {
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Content styles */
+.heatmap-content {
+    padding: 20px;
+}
+
+/* Legend styles */
+.heatmap-legend {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.legend-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted-text-color, #666);
+}
+
+.legend-scale {
+    display: flex;
+    height: 12px;
+    width: 200px;
+}
+
+.legend-color {
+    flex: 1;
+    height: 100%;
+}
+
+.legend-labels {
+    display: flex;
+    width: 200px;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted-text-color, #666);
+}
+
+/* Visualization styles */
+.heatmap-visualization {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+    position: relative;
+    min-height: 220px;
+}
+
+/* Tile styles */
+.heatmap-tile {
+    border-radius: 6px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.heatmap-tile:hover {
+    transform: translateY(-3px) scale(1.05);
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.tile-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    color: var(--text-color, #333);
+}
+
+.tile-value {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.tile-value.positive {
+    color: #4caf50;
+}
+
+.tile-value.negative {
+    color: #f44336;
+}
+
+/* Sector tile specific styles */
+.sector-tile {
+    min-height: 80px;
+}
+
+/* Stock tile specific styles */
+.stock-tile {
+    min-height: 70px;
+}
+
+/* Loading state */
+.heatmap-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 3;
+}
+
+.heatmap-loading i {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: var(--primary-color, #2196F3);
+}
+
+.heatmap-loading p {
+    font-size: 14px;
+    color: var(--text-color, #333);
+}
+
+/* Error state */
+.heatmap-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+}
+
+.heatmap-error i {
+    font-size: 32px;
+    color: #f44336;
+    margin-bottom: 10px;
+}
+
+.heatmap-error p {
+    font-size: 14px;
+    color: var(--text-color, #333);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .heatmap-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .heatmap-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .heatmap-visualization {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+
+    .tile-name {
+        font-size: 12px;
+    }
+
+    .tile-value {
+        font-size: 12px;
+    }
+}
+
+/* Dark theme support */
+[data-theme="dark"] .market-heatmap-widget {
+    background-color: var(--card-bg-color, #2d333b);
+}
+
+[data-theme="dark"] .heatmap-loading {
+    background-color: rgba(45, 51, 59, 0.8);
+}
+
+[data-theme="dark"] .heatmap-tile {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Section positioning */
+.market-heatmap-section {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,75 @@
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Mukta:wght@300;400;500;600;700&display=swap');
+
+/* Font Variables */
+:root {
+    --font-primary: 'Poppins', sans-serif;
+    --font-secondary: 'Montserrat', sans-serif;
+    --font-indian: 'Mukta', sans-serif; /* Good for Indian language support */
+    
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+}
+
+/* Heading Styles */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-secondary);
+    letter-spacing: -0.02em;
+    font-weight: var(--font-weight-semibold);
+}
+
+h1 {
+    font-size: var(--text-4xl);
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: var(--text-3xl);
+    line-height: 1.3;
+}
+
+h3 {
+    font-size: var(--text-2xl);
+    line-height: 1.4;
+}
+
+h4 {
+    font-size: var(--text-xl);
+    line-height: 1.5;
+}
+
+/* Body Text */
+body {
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    line-height: 1.6;
+}
+
+/* Special Text Classes */
+.text-upcase {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.text-indian-rupee::before {
+    content: '₹';
+    font-family: var(--font-indian);
+}
+
+.number-font {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+}

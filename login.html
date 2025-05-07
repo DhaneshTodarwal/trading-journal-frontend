@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup - Trading Journal</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Link to your main CSS -->
+    <link rel="stylesheet" href="css/auth-style.css"> <!-- Specific CSS for auth page -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <!-- Trading decorative elements -->
+        <div class="trading-icons">
+            <i class="fas fa-chart-line trading-icon-bull"></i>
+            <i class="fas fa-chart-line trading-icon-bear"></i>
+        </div>
+        
+        <svg class="trading-chart" viewBox="0 0 100 50">
+            <path class="chart-line" d="M0,25 L10,30 L20,15 L30,20 L40,10 L50,25 L60,20 L70,40 L80,30 L90,15 L100,20"></path>
+        </svg>
+
+        <button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+            <i class="fas fa-adjust"></i>
+        </button>
+
+        <!-- Login View -->
+        <div id="login-view" class="auth-form-container">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                    <span class="cursor"></span>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                    <span class="cursor"></span>
+                    <div class="forgot-password-link">
+                        <a href="#" id="forgot-password-link">Forgot Password?</a>
+                    </div>
+                </div>
+                <div id="login-error" class="error-message"></div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <p class="toggle-link">Don't have an account? <button id="show-signup-btn" class="link-button">Sign Up</button></p>
+        </div>
+
+        <!-- Signup View -->
+        <div id="signup-view" class="auth-form-container" style="display: none;">
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                 <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                    <span class="cursor"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required>
+                    <span class="cursor"></span>
+                </div>
+                <div id="signup-error" class="error-message"></div>
+                <button type="submit" class="btn btn-success">Sign Up</button>
+            </form>
+            <p class="toggle-link">Already have an account? <button id="show-login-btn" class="link-button">Login</button></p>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
