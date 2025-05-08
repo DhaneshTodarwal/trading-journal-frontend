@@ -289,7 +289,6 @@
     /* Enhanced scrolling on touch devices */
     .touch-device .scrollable {
         -webkit-overflow-scrolling: touch;
-        overflow-scrolling: touch;
     }
     
     /* Swipeable cards */
@@ -392,4 +391,41 @@
         padding-top: 12px;
         padding-bottom: 12px;
     }
+}
+
+/* Pull-to-refresh indicator */
+.pull-to-refresh {
+    position: absolute;
+    left: 50%;
+    top: -60px;
+    transform: translateX(-50%);
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 1000;
+}
+
+.pull-to-refresh.visible {
+    opacity: 1;
+}
+
+.pull-to-refresh.pulling {
+    transform: translateX(-50%) rotate(180deg);
+}
+
+.pull-to-refresh.refreshing {
+    transform: translateX(-50%) rotate(0deg);
+    animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(360deg); }
 }
