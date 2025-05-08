@@ -12,7 +12,7 @@ const avgReturnElement = document.getElementById('avg-return');
 const netProfitElement = document.getElementById('net-profit');
 
 // --- Configuration ---
-const API_BASE_URL = 'http://localhost:3000/api'; // Your backend API URL
+const API_BASE_URL = 'https://trading-journal-backend.onrender.com/api'; // Render backend API URL
 
 // --- New DOM Element References (Auth & Dashboard) ---
 const authSection = document.getElementById('auth-section');

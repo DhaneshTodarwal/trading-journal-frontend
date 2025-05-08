@@ -1,7 +1,7 @@
 // filepath: /home/dhanesh-todarwal/TRADING-JOURNAL-CODE/FILE 1 EDITING/js/auth.js
 
 // --- Configuration ---
-const API_BASE_URL = 'http://localhost:3000/api'; // Ensure this matches your backend
+const API_BASE_URL = 'https://trading-journal-backend-ln3p.onrender.com/api'; // Updated to deployed backend
 
 // --- DOM Element References (from login.html) ---
 const loginView = document.getElementById('login-view');
